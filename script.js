@@ -339,7 +339,7 @@ skillBars.forEach((bar) => {
 });
 
 /* =========================
-   Project Slider
+   Project Slider with Swipe
 ========================= */
 
 const projectTrack = document.getElementById("projectTrack");
@@ -349,9 +349,15 @@ const projectNext = document.getElementById("projectNext");
 const projectCurrent = document.getElementById("projectCurrent");
 const projectTotal = document.getElementById("projectTotal");
 const projectProgress = document.getElementById("projectProgress");
+const projectSlider = document.querySelector(".project-slider");
+const projectSliderWindow = document.querySelector(".project-slider-window");
 
 let projectIndex = 0;
 let projectAutoplay;
+let projectStartX = 0;
+let projectCurrentX = 0;
+let projectIsDragging = false;
+let projectIsHovered = false;
 
 function formatProjectNumber(number) {
   return String(number).padStart(2, "0");
@@ -362,6 +368,12 @@ function updateProjectSlider() {
 
   projectTrack.style.transform = `translateX(-${projectIndex * 100}%)`;
 
+  projectSlides.forEach((slide, index) => {
+    slide.classList.toggle("is-active", index === projectIndex);
+    slide.classList.toggle("is-prev", index < projectIndex);
+    slide.classList.toggle("is-next", index > projectIndex);
+  });
+
   if (projectCurrent) {
     projectCurrent.textContent = formatProjectNumber(projectIndex + 1);
   }
@@ -371,9 +383,7 @@ function updateProjectSlider() {
   }
 
   if (projectProgress) {
-    projectProgress.style.width = `${
-      ((projectIndex + 1) / projectSlides.length) * 100
-    }%`;
+    projectProgress.style.width = `${((projectIndex + 1) / projectSlides.length) * 100}%`;
   }
 }
 
@@ -390,7 +400,7 @@ function goToPrevProject() {
 function startProjectAutoplay() {
   stopProjectAutoplay();
 
-  if (!projectSlides.length || prefersReducedMotion) return;
+  if (!projectSlides.length || prefersReducedMotion || projectIsHovered) return;
 
   projectAutoplay = setInterval(() => {
     goToNextProject();
@@ -400,6 +410,7 @@ function startProjectAutoplay() {
 function stopProjectAutoplay() {
   if (projectAutoplay) {
     clearInterval(projectAutoplay);
+    projectAutoplay = null;
   }
 }
 
@@ -413,19 +424,100 @@ projectPrev?.addEventListener("click", () => {
   startProjectAutoplay();
 });
 
-document
-  .querySelector(".project-slider")
-  ?.addEventListener("mouseenter", stopProjectAutoplay);
+/* Pause autoplay on hover */
+projectSlider?.addEventListener("mouseenter", () => {
+  projectIsHovered = true;
+  stopProjectAutoplay();
+});
 
-document
-  .querySelector(".project-slider")
-  ?.addEventListener("mouseleave", startProjectAutoplay);
+projectSlider?.addEventListener("mouseleave", () => {
+  projectIsHovered = false;
+  startProjectAutoplay();
+});
+
+/* Touch + Mouse Swipe */
+function projectDragStart(clientX) {
+  projectStartX = clientX;
+  projectCurrentX = clientX;
+  projectIsDragging = true;
+  stopProjectAutoplay();
+
+  if (projectTrack) {
+    projectTrack.style.transition = "none";
+  }
+}
+
+function projectDragMove(clientX) {
+  if (!projectIsDragging || !projectTrack || !projectSliderWindow) return;
+
+  projectCurrentX = clientX;
+
+  const diff = projectCurrentX - projectStartX;
+  const dragPercent = (diff / projectSliderWindow.offsetWidth) * 100;
+
+  projectTrack.style.transform = `translateX(calc(-${projectIndex * 100}% + ${dragPercent}%))`;
+}
+
+function projectDragEnd() {
+  if (!projectIsDragging || !projectTrack) return;
+
+  const diff = projectCurrentX - projectStartX;
+  const threshold = 70;
+
+  projectTrack.style.transition = "transform 0.65s cubic-bezier(0.22, 1, 0.36, 1)";
+
+  if (Math.abs(diff) > threshold) {
+    if (diff < 0) {
+      goToNextProject();
+    } else {
+      goToPrevProject();
+    }
+  } else {
+    updateProjectSlider();
+  }
+
+  projectIsDragging = false;
+
+  if (!projectIsHovered) {
+    startProjectAutoplay();
+  }
+}
+
+/* Mobile touch */
+projectSliderWindow?.addEventListener(
+  "touchstart",
+  (event) => {
+    projectDragStart(event.touches[0].clientX);
+  },
+  { passive: true }
+);
+
+projectSliderWindow?.addEventListener(
+  "touchmove",
+  (event) => {
+    projectDragMove(event.touches[0].clientX);
+  },
+  { passive: true }
+);
+
+projectSliderWindow?.addEventListener("touchend", projectDragEnd);
+
+/* Desktop drag */
+projectSliderWindow?.addEventListener("mousedown", (event) => {
+  projectDragStart(event.clientX);
+});
+
+window.addEventListener("mousemove", (event) => {
+  projectDragMove(event.clientX);
+});
+
+window.addEventListener("mouseup", projectDragEnd);
 
 updateProjectSlider();
 startProjectAutoplay();
 
 /* =========================
-   Testimonials Slider
+   Testimonials Slider with Swipe
 ========================= */
 
 const testimonialTrack = document.getElementById("testimonialTrack");
@@ -435,9 +527,13 @@ const testimonialNext = document.getElementById("testimonialNext");
 const testimonialCurrent = document.getElementById("testimonialCurrent");
 const testimonialTotal = document.getElementById("testimonialTotal");
 const testimonialProgress = document.getElementById("testimonialProgress");
+const testimonialWindow = document.querySelector(".testimonial-window");
 
 let testimonialIndex = 0;
 let testimonialAutoplay;
+let testimonialStartX = 0;
+let testimonialCurrentX = 0;
+let testimonialIsDragging = false;
 
 function formatTestimonialNumber(number) {
   return String(number).padStart(2, "0");
@@ -448,6 +544,12 @@ function updateTestimonialSlider() {
 
   testimonialTrack.style.transform = `translateX(-${testimonialIndex * 100}%)`;
 
+  testimonialSlides.forEach((slide, index) => {
+    slide.classList.toggle("is-active", index === testimonialIndex);
+    slide.classList.toggle("is-prev", index < testimonialIndex);
+    slide.classList.toggle("is-next", index > testimonialIndex);
+  });
+
   if (testimonialCurrent) {
     testimonialCurrent.textContent = formatTestimonialNumber(testimonialIndex + 1);
   }
@@ -457,9 +559,7 @@ function updateTestimonialSlider() {
   }
 
   if (testimonialProgress) {
-    testimonialProgress.style.width = `${
-      ((testimonialIndex + 1) / testimonialSlides.length) * 100
-    }%`;
+    testimonialProgress.style.width = `${((testimonialIndex + 1) / testimonialSlides.length) * 100}%`;
   }
 }
 
@@ -501,13 +601,79 @@ testimonialPrev?.addEventListener("click", () => {
   startTestimonialAutoplay();
 });
 
-document
-  .querySelector(".testimonial-slider")
-  ?.addEventListener("mouseenter", stopTestimonialAutoplay);
+/* Touch + Mouse Swipe */
+function testimonialDragStart(clientX) {
+  testimonialStartX = clientX;
+  testimonialCurrentX = clientX;
+  testimonialIsDragging = true;
+  stopTestimonialAutoplay();
 
-document
-  .querySelector(".testimonial-slider")
-  ?.addEventListener("mouseleave", startTestimonialAutoplay);
+  if (testimonialTrack) {
+    testimonialTrack.style.transition = "none";
+  }
+}
+
+function testimonialDragMove(clientX) {
+  if (!testimonialIsDragging || !testimonialTrack) return;
+
+  testimonialCurrentX = clientX;
+  const diff = testimonialCurrentX - testimonialStartX;
+  const dragPercent = (diff / testimonialWindow.offsetWidth) * 100;
+
+  testimonialTrack.style.transform = `translateX(calc(-${testimonialIndex * 100}% + ${dragPercent}%))`;
+}
+
+function testimonialDragEnd() {
+  if (!testimonialIsDragging || !testimonialTrack) return;
+
+  const diff = testimonialCurrentX - testimonialStartX;
+  const threshold = 70;
+
+  testimonialTrack.style.transition = "transform 0.65s cubic-bezier(0.22, 1, 0.36, 1)";
+
+  if (Math.abs(diff) > threshold) {
+    if (diff < 0) {
+      goToNextTestimonial();
+    } else {
+      goToPrevTestimonial();
+    }
+  } else {
+    updateTestimonialSlider();
+  }
+
+  testimonialIsDragging = false;
+  startTestimonialAutoplay();
+}
+
+/* Mobile touch */
+testimonialWindow?.addEventListener(
+  "touchstart",
+  (event) => {
+    testimonialDragStart(event.touches[0].clientX);
+  },
+  { passive: true }
+);
+
+testimonialWindow?.addEventListener(
+  "touchmove",
+  (event) => {
+    testimonialDragMove(event.touches[0].clientX);
+  },
+  { passive: true }
+);
+
+testimonialWindow?.addEventListener("touchend", testimonialDragEnd);
+
+/* Desktop drag */
+testimonialWindow?.addEventListener("mousedown", (event) => {
+  testimonialDragStart(event.clientX);
+});
+
+window.addEventListener("mousemove", (event) => {
+  testimonialDragMove(event.clientX);
+});
+
+window.addEventListener("mouseup", testimonialDragEnd);
 
 updateTestimonialSlider();
 startTestimonialAutoplay();
@@ -550,17 +716,17 @@ faqItems.forEach((item) => {
 });
 
 /* =========================
-   Contact Form Demo Handler
+   Contact Form Submit State
 ========================= */
 
 const contactForm = document.getElementById("contactForm");
+const contactSubmit = document.querySelector(".contact-submit");
 
-contactForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  alert(
-    "Your message is ready. Connect this form with Formspree, Web3Forms, EmailJS, or your backend to receive messages."
-  );
+contactForm?.addEventListener("submit", () => {
+  if (contactSubmit) {
+    contactSubmit.disabled = true;
+    contactSubmit.innerHTML = "Sending...";
+  }
 });
 
 /* =========================
