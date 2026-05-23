@@ -473,18 +473,19 @@ button {
 
 .hero-title {
   margin: 0;
-  max-width: 10.2ch;
+  max-width: 10.8ch;
   font-family: Manrope, Inter, sans-serif;
-  font-size: clamp(3.4rem, 8.8vw, 8.4rem);
-  line-height: 0.88;
+  font-size: clamp(3.2rem, 8vw, 7.8rem);
+  line-height: 0.98;
   letter-spacing: -0.065em;
   color: var(--text);
 }
 
 .hero-title .line {
   display: block;
-  overflow: hidden;
-  padding-bottom: 0.12em;
+  overflow: visible;
+  padding-top: 0.04em;
+  padding-bottom: 0.08em;
 }
 
 .hero-title .word {
@@ -966,8 +967,8 @@ button {
 
   .hero-title {
     max-width: 100%;
-    font-size: clamp(3rem, 15vw, 5.6rem);
-    line-height: 0.92;
+    font-size: clamp(2.85rem, 14vw, 5.2rem);
+    line-height: 1;
   }
 
   .hero-copy {
@@ -4837,5 +4838,406 @@ button {
     left: 8px;
     right: 8px;
     top: calc(100% + 8px) !important;
+  }
+}
+
+
+/* =========================
+   Project Slider Mobile Fix
+   Image first + full screenshot width
+========================= */
+
+/* Make screenshot fill the browser frame properly */
+.project-image-body {
+  padding: 0 !important;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.project-image-body::before {
+  display: none !important;
+}
+
+.project-image-body img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  object-fit: contain !important;
+  object-position: top center !important;
+  background: #ffffff;
+}
+
+/* Better browser preview sizing on desktop too */
+.browser-frame {
+  width: 100%;
+  max-width: 620px;
+}
+
+.project-image-body {
+  min-height: 366px;
+}
+
+/* Mobile project slider layout */
+@media (max-width: 760px) {
+  .project-slide {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Show screenshot first on mobile */
+  .project-preview {
+    order: 1;
+    padding: 12px;
+    min-height: auto;
+  }
+
+  .project-card-content {
+    order: 2;
+  }
+
+  .browser-frame {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    border-radius: 22px;
+    transform: none !important;
+  }
+
+  .browser-top {
+    height: 44px;
+    padding: 0 14px;
+  }
+
+  .browser-body {
+    min-height: auto;
+    padding: 0 !important;
+  }
+
+  .project-image-body {
+    min-height: auto;
+    height: auto;
+  }
+
+  .project-image-body img {
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    object-fit: contain !important;
+    object-position: top center !important;
+  }
+
+  .project-card-content {
+    min-height: auto;
+    padding: 22px;
+  }
+
+  .project-meta {
+    margin-bottom: 30px;
+  }
+
+  .project-card-content h3 {
+    font-size: clamp(1.8rem, 9vw, 3rem);
+    line-height: 1;
+  }
+
+  .project-card-content p {
+    line-height: 1.7;
+  }
+}
+
+/* Extra small mobile */
+@media (max-width: 480px) {
+  .project-slider-window {
+    padding: 14px;
+  }
+
+  .project-preview {
+    padding: 10px;
+  }
+
+  .project-card-content {
+    padding: 20px;
+  }
+
+  .browser-top {
+    height: 40px;
+  }
+
+  .browser-top span {
+    width: 8px;
+    height: 8px;
+  }
+}
+/* =========================
+   Final Project Slider Fix
+   - Prevents mobile content clipping
+   - Keeps screenshots proportional
+   - Removes white empty space under screenshots
+   - Improves desktop/mobile slider spacing
+========================= */
+
+.project-slider-window,
+.testimonial-window {
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.project-slider-window:active,
+.testimonial-window:active {
+  cursor: grabbing;
+}
+
+.project-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.project-slide {
+  min-width: 100% !important;
+  width: 100% !important;
+  padding: 0 1px;
+}
+
+.project-card-content,
+.project-preview {
+  height: auto;
+}
+
+.project-preview {
+  overflow: visible;
+}
+
+.browser-frame {
+  width: 100% !important;
+  max-width: 660px;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.browser-body.project-image-body {
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: 470px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.035) !important;
+}
+
+.browser-body.project-image-body::before {
+  display: none !important;
+}
+
+.project-image-body img {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-width: 100% !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: top center !important;
+  background: transparent !important;
+}
+
+.project-card-content {
+  min-height: 520px;
+}
+
+.project-tags {
+  margin-bottom: 24px;
+}
+
+.project-link {
+  margin-top: auto;
+}
+
+@media (max-width: 1180px) {
+  .project-slide {
+    grid-template-columns: 1fr !important;
+    gap: 22px;
+  }
+
+  .project-preview {
+    min-height: auto !important;
+  }
+
+  .browser-body.project-image-body {
+    max-height: 520px;
+  }
+}
+
+@media (max-width: 760px) {
+  .project-slider {
+    border-radius: 28px;
+  }
+
+  .project-slider-window {
+    padding: 18px;
+    overflow: hidden;
+  }
+
+  .project-slide {
+    display: flex !important;
+    flex-direction: column;
+    gap: 16px !important;
+    align-items: stretch;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .project-preview {
+    order: 1;
+    min-height: 0 !important;
+    padding: 12px;
+    overflow: hidden;
+    border-radius: 24px;
+  }
+
+  .project-card-content {
+    order: 2;
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  .project-card-content::before {
+    opacity: 0.65;
+  }
+
+  .project-meta {
+    margin-bottom: 26px !important;
+  }
+
+  .project-card-content h3 {
+    font-size: clamp(1.75rem, 8vw, 2.75rem) !important;
+    line-height: 1.02 !important;
+  }
+
+  .project-card-content p {
+    margin-top: 18px;
+    line-height: 1.65 !important;
+    font-size: 0.96rem;
+  }
+
+  .project-tags {
+    margin-top: 22px !important;
+    margin-bottom: 0 !important;
+    gap: 8px;
+  }
+
+  .project-tags span {
+    min-height: 34px;
+    font-size: 0.82rem;
+  }
+
+  .project-link {
+    width: 100%;
+    justify-content: center;
+    margin-top: 24px !important;
+  }
+
+  .browser-frame {
+    max-width: 100% !important;
+    min-height: 0 !important;
+    border-radius: 22px;
+    transform: none !important;
+  }
+
+  .browser-top {
+    height: 40px;
+    padding: 0 14px;
+  }
+
+  .browser-top span {
+    width: 8px;
+    height: 8px;
+  }
+
+  .browser-body.project-image-body {
+    min-height: 0 !important;
+    max-height: 330px;
+    height: auto !important;
+    overflow-y: auto;
+  }
+
+  .project-image-body img {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .project-slider-bottom {
+    padding: 0 18px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-slider-window {
+    padding: 14px;
+  }
+
+  .project-preview {
+    padding: 10px;
+  }
+
+  .project-card-content {
+    padding: 18px;
+  }
+
+  .project-card-content h3 {
+    font-size: clamp(1.65rem, 8.5vw, 2.45rem) !important;
+  }
+
+  .project-card-content p {
+    font-size: 0.92rem;
+  }
+
+  .browser-body.project-image-body {
+    max-height: 285px;
+  }
+}
+
+
+/* =========================
+   Final Hero Heading Fix
+   Prevents large H1 words from clipping/cutting
+========================= */
+
+.hero-title {
+  max-width: 10.8ch;
+  font-size: clamp(3.2rem, 8vw, 7.8rem);
+  line-height: 0.98;
+  overflow: visible;
+}
+
+.hero-title .line {
+  overflow: visible;
+  padding-top: 0.04em;
+  padding-bottom: 0.08em;
+}
+
+.hero-title .word {
+  transform-origin: left center;
+  backface-visibility: hidden;
+}
+
+@media (max-width: 920px) {
+  .hero-title {
+    max-width: 100%;
+    font-size: clamp(2.85rem, 14vw, 5.2rem);
+    line-height: 1;
+  }
+}
+
+@media (max-width: 540px) {
+  .hero-title {
+    font-size: clamp(2.75rem, 13.5vw, 4.7rem);
+    line-height: 1.02;
+    letter-spacing: -0.058em;
   }
 }
