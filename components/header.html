@@ -1,0 +1,492 @@
+<style>
+  /* =========================================================
+     Arjumand Shared Header - Fixed Scoped Version
+  ========================================================= */
+
+  #header-placeholder {
+    position: relative;
+    z-index: 99999;
+  }
+
+  .aa-header,
+  .aa-header * {
+    box-sizing: border-box;
+  }
+
+  .aa-header {
+    position: sticky;
+    top: 0;
+    z-index: 99999;
+    width: 100%;
+    padding: 18px 0;
+    background: transparent;
+    transition:
+      padding 0.25s ease,
+      background 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .aa-header.is-scrolled {
+    padding: 12px 0;
+    background: rgba(5, 7, 8, 0.78);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  }
+
+  .aa-header-shell {
+    width: min(100% - 48px, 1320px);
+    min-height: 82px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 22px;
+    padding: 14px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 30px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.025)),
+      rgba(10, 10, 13, 0.78);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow:
+      0 28px 90px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .aa-brand {
+    min-width: 220px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text, #f5f4f0);
+    text-decoration: none;
+  }
+
+  .aa-brand-mark {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    color: #050608;
+    font-size: 1rem;
+    font-weight: 950;
+    letter-spacing: -0.05em;
+    background: linear-gradient(135deg, var(--accent, #d6ff3f), var(--accent-2, #8cf0ff));
+    box-shadow:
+      0 18px 48px rgba(214, 255, 63, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  }
+
+  .aa-brand-copy {
+    min-width: 0;
+    display: grid;
+    gap: 5px;
+  }
+
+  .aa-brand-copy strong {
+    display: block;
+    color: var(--text, #f5f4f0);
+    font-size: 1rem;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+  }
+
+  .aa-brand-copy small {
+    display: block;
+    color: var(--muted, rgba(245, 244, 240, 0.62));
+    font-size: 0.72rem;
+    line-height: 1;
+    font-weight: 850;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .aa-nav {
+    justify-self: center;
+    max-width: 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.095);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.045);
+  }
+
+  .aa-nav a {
+    position: relative;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    border-radius: 999px;
+    color: var(--muted, rgba(245, 244, 240, 0.64));
+    font-size: 0.9rem;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      color 0.25s ease,
+      background 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .aa-nav a::before,
+  .aa-nav a::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .aa-nav a:hover,
+  .aa-nav a.active {
+    color: var(--text, #f5f4f0);
+    background: rgba(255, 255, 255, 0.085);
+  }
+
+  .aa-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .aa-cta {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 22px;
+    border-radius: 17px;
+    color: #050608;
+    background: linear-gradient(135deg, var(--accent, #d6ff3f), var(--accent-2, #8cf0ff));
+    font-size: 0.92rem;
+    font-weight: 950;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow:
+      0 18px 52px rgba(214, 255, 63, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .aa-cta:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 22px 62px rgba(140, 240, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  .aa-menu-toggle {
+    width: 48px;
+    height: 48px;
+    display: none;
+    place-items: center;
+    position: relative;
+    flex: 0 0 48px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.055);
+    cursor: pointer;
+  }
+
+  .aa-menu-toggle span {
+    position: absolute;
+    width: 19px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--text, #f5f4f0);
+    transition: transform 0.25s ease;
+  }
+
+  .aa-menu-toggle span:first-child {
+    transform: translateY(-5px);
+  }
+
+  .aa-menu-toggle span:last-child {
+    transform: translateY(5px);
+  }
+
+  .aa-menu-toggle.active span:first-child {
+    transform: rotate(45deg);
+  }
+
+  .aa-menu-toggle.active span:last-child {
+    transform: rotate(-45deg);
+  }
+
+  .aa-mobile-menu {
+    width: min(100% - 48px, 1320px);
+    margin: 12px auto 0;
+    display: none;
+  }
+
+  .aa-mobile-menu.active {
+    display: block;
+  }
+
+  .aa-mobile-card {
+    display: grid;
+    gap: 4px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 26px;
+    background: rgba(10, 10, 13, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 26px 88px rgba(0, 0, 0, 0.42);
+  }
+
+  .aa-mobile-card a {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    border-radius: 16px;
+    color: var(--muted, rgba(245, 244, 240, 0.64));
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+      color 0.25s ease,
+      background 0.25s ease;
+  }
+
+  .aa-mobile-card a:hover,
+  .aa-mobile-card a.active {
+    color: var(--text, #f5f4f0);
+    background: rgba(255, 255, 255, 0.075);
+  }
+
+  .aa-mobile-card .aa-mobile-cta {
+    justify-content: center;
+    margin-top: 8px;
+    color: #050608;
+    background: linear-gradient(135deg, var(--accent, #d6ff3f), var(--accent-2, #8cf0ff));
+  }
+
+  body.aa-menu-open {
+    overflow: hidden;
+  }
+
+  @media (max-width: 1280px) {
+    .aa-header-shell {
+      width: min(100% - 36px, 1240px);
+      gap: 16px;
+    }
+
+    .aa-brand {
+      min-width: 200px;
+    }
+
+    .aa-nav a {
+      padding: 0 12px;
+      font-size: 0.84rem;
+    }
+
+    .aa-cta {
+      padding: 0 18px;
+    }
+  }
+
+  @media (max-width: 1120px) {
+    .aa-header-shell {
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+    }
+
+    .aa-nav,
+    .aa-cta {
+      display: none;
+    }
+
+    .aa-menu-toggle {
+      display: grid;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .aa-header {
+      padding: 12px 0;
+    }
+
+    .aa-header-shell {
+      width: min(100% - 24px, 1320px);
+      min-height: 74px;
+      padding: 12px;
+      border-radius: 24px;
+    }
+
+    .aa-brand {
+      min-width: 0;
+      gap: 10px;
+    }
+
+    .aa-brand-mark {
+      width: 44px;
+      height: 44px;
+      flex-basis: 44px;
+      border-radius: 14px;
+    }
+
+    .aa-brand-copy strong {
+      font-size: 0.95rem;
+    }
+
+    .aa-brand-copy small {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+    }
+
+    .aa-mobile-menu {
+      width: min(100% - 24px, 1320px);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .aa-brand-copy small {
+      display: none;
+    }
+
+    .aa-brand-copy strong {
+      max-width: 145px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+</style>
+
+<header class="aa-header" id="aaHeader">
+  <div class="aa-header-shell">
+    <a aria-label="Arjumand Ali home" class="aa-brand" href="/index.html#top">
+      <span class="aa-brand-mark">A</span>
+
+      <span class="aa-brand-copy">
+        <strong>Arjumand Ali</strong>
+        <small>WordPress Developer</small>
+      </span>
+    </a>
+
+    <nav aria-label="Primary navigation" class="aa-nav">
+      <a href="/index.html#home">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/services.html">Services</a>
+      <a href="/projects.html">Projects</a>
+      <a href="/wordpress-developer-pakistan.html">WordPress</a>
+      <a href="/landing-page-design.html">Landing Pages</a>
+      <a href="/website-redesign.html">Redesign</a>
+      <a href="/official-profiles.html">Profiles</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+
+    <div class="aa-actions">
+      <a class="aa-cta" href="https://wa.me/923001422239" rel="noopener" target="_blank">
+        Let’s talk
+      </a>
+
+      <button aria-controls="aaMobileMenu" aria-expanded="false" aria-label="Open menu" class="aa-menu-toggle" id="aaMenuToggle" type="button">
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="aa-mobile-menu" id="aaMobileMenu">
+    <div class="aa-mobile-card">
+      <a href="/index.html#home">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/services.html">Services</a>
+      <a href="/projects.html">Projects</a>
+      <a href="/wordpress-developer-pakistan.html">WordPress Developer Pakistan</a>
+      <a href="/landing-page-design.html">Landing Page Design</a>
+      <a href="/website-redesign.html">Website Redesign</a>
+      <a href="/official-profiles.html">Official Profiles</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/assets/resume/Arjumand-porrtfolio.pdf" rel="noopener" target="_blank">Resume</a>
+      <a href="https://www.instagram.com/arjumand.codes/" rel="noopener" target="_blank">Instagram</a>
+      <a href="tel:+923001422239">Call Me</a>
+      <a href="sms:+923001422239">Send SMS</a>
+      <a class="aa-mobile-cta" href="https://wa.me/923001422239" rel="noopener" target="_blank">WhatsApp Me</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  (() => {
+    const body = document.body;
+    const header = document.getElementById("aaHeader");
+    const menuToggle = document.getElementById("aaMenuToggle");
+    const mobileMenu = document.getElementById("aaMobileMenu");
+    const mobileLinks = document.querySelectorAll(".aa-mobile-card a");
+    const navLinks = document.querySelectorAll(".aa-nav a, .aa-mobile-card a");
+
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = mobileMenu.classList.toggle("active");
+
+        body.classList.toggle("aa-menu-open", isOpen);
+        menuToggle.classList.toggle("active", isOpen);
+
+        menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        menuToggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+      });
+
+      mobileLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.remove("active");
+          body.classList.remove("aa-menu-open");
+          menuToggle.classList.remove("active");
+
+          menuToggle.setAttribute("aria-expanded", "false");
+          menuToggle.setAttribute("aria-label", "Open menu");
+        });
+      });
+    }
+
+    const updateHeader = () => {
+      if (!header) return;
+
+      if (window.scrollY > 20) {
+        header.classList.add("is-scrolled");
+      } else {
+        header.classList.remove("is-scrolled");
+      }
+    };
+
+    updateHeader();
+    window.addEventListener("scroll", updateHeader, { passive: true });
+
+    const currentPage = window.location.pathname.split("/").pop() || "index.html";
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (!href) return;
+
+      const cleanHref = href.split("#")[0];
+      const linkPage = cleanHref.split("/").pop() || "index.html";
+
+      if (linkPage === currentPage) {
+        link.classList.add("active");
+      }
+
+      if (currentPage === "index.html" && href.includes("index.html#home")) {
+        link.classList.add("active");
+      }
+    });
+  })();
+</script>
