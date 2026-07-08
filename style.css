@@ -1539,6 +1539,7 @@ body.aa-menu-open {
 
 .process-item {
   display: grid;
+  align-items: center;
   grid-template-columns: 42px 1fr;
   gap: 16px;
   padding: 16px 0;
@@ -1564,7 +1565,7 @@ body.aa-menu-open {
   font-size: 0.78rem;
 }
 
-.process-item h4 {
+.process-item h3 {
   margin: 0 0 7px;
   font-family: var(--display);
   font-weight: 560;
@@ -1959,7 +1960,6 @@ body.aa-menu-open {
   font-size: 0.94rem;
   line-height: 1.65;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -3663,7 +3663,6 @@ main,
   font-size: 0.94rem;
   line-height: 1.65;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -4146,3 +4145,14 @@ main,
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
+
+/* Native smooth scrolling — reliable, no JS required */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offsets the scroll stop point so the fixed header never covers
+   the top of a section. Adjust 120px if your header height changes. */
+section[id] {
+  scroll-margin-top: 120px;
+} 
