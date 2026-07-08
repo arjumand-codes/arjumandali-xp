@@ -8,17 +8,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const body = document.body;
 
   /* =========================
-     Header Scroll Effect
+     Header Scroll + Active Nav
+     (combined into a single scroll listener)
   ========================= */
   const header = document.getElementById("aaHeader");
+  const navLinks = document.querySelectorAll(".aa-nav a, .aa-mobile-card a");
+  const sections = [...document.querySelectorAll("section[id]")];
 
-  const updateHeader = () => {
-    if (!header) return;
-    header.classList.toggle("is-scrolled", window.scrollY > 18);
+  const handleScroll = () => {
+    if (header) {
+      header.classList.toggle("is-scrolled", window.scrollY > 18);
+    }
+
+    let activeId = "home";
+
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop - 160;
+      if (window.scrollY >= sectionTop) {
+        activeId = section.id;
+      }
+    });
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      link.classList.toggle("active", href === `#${activeId}`);
+    });
   };
 
-  updateHeader();
-  window.addEventListener("scroll", updateHeader, { passive: true });
+  handleScroll();
+  window.addEventListener("scroll", handleScroll, { passive: true });
 
   /* =========================
      Mobile Menu
@@ -52,54 +70,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
      Smooth Scroll
+     Handled natively via CSS (scroll-behavior: smooth +
+     scroll-margin-top on each section) — see smooth-scroll.css.
+     No JS needed here, which also means it can't be broken by an
+     unrelated script error elsewhere on the page.
   ========================= */
-  document.querySelectorAll('a[href^="#"]').forEach((link) => {
-    link.addEventListener("click", (event) => {
-      const targetId = link.getAttribute("href");
-
-      if (!targetId || targetId === "#") return;
-
-      const target = document.querySelector(targetId);
-      if (!target) return;
-
-      event.preventDefault();
-
-      const headerOffset = 120;
-      const targetPosition =
-        target.getBoundingClientRect().top + window.scrollY - headerOffset;
-
-      window.scrollTo({
-        top: targetPosition,
-        behavior: "smooth",
-      });
-    });
-  });
-
-  /* =========================
-     Active Nav Links
-  ========================= */
-  const navLinks = document.querySelectorAll(".aa-nav a, .aa-mobile-card a");
-  const sections = [...document.querySelectorAll("section[id]")];
-
-  const updateActiveLinks = () => {
-    let activeId = "home";
-
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop - 160;
-
-      if (window.scrollY >= sectionTop) {
-        activeId = section.id;
-      }
-    });
-
-    navLinks.forEach((link) => {
-      const href = link.getAttribute("href");
-      link.classList.toggle("active", href === `#${activeId}`);
-    });
-  };
-
-  updateActiveLinks();
-  window.addEventListener("scroll", updateActiveLinks, { passive: true });
 
   /* =========================
      Reveal Animation
@@ -122,18 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   revealItems.forEach((item) => revealObserver.observe(item));
-
-  /* =========================
-     Hero Title Word Reveal
-  ========================= */
-  const heroWords = document.querySelectorAll(".hero-title .word");
-
-  heroWords.forEach((word, index) => {
-    setTimeout(() => {
-      word.style.opacity = "1";
-      word.style.transform = "translateY(0)";
-    }, index * 75);
-  });
 
   /* =========================
      Hero Counters
@@ -322,7 +285,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
      Projects Card Slider
-     New HTML Classes
   ========================= */
   createCardSlider({
     trackSelector: ".project-card-track",
@@ -336,7 +298,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
      Testimonials Card Slider
-     New HTML Classes
   ========================= */
   createCardSlider({
     trackSelector: ".testimonial-card-track",
