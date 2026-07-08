@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /blog/post-template.html
 
 Sitemap: https://arjumandali.vercel.app/sitemap.xml
